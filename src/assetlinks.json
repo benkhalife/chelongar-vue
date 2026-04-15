@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "ir.nitrocode.khatebastan.twa",
+                     "sha256_cert_fingerprints": ["29:AD:64:E0:08:99:62:A7:17:70:E9:B2:39:74:85:65:37:C3:7A:1B:18:7E:E2:3C:DF:81:3D:D9:01:C2:63:11"] }
+      }
+]

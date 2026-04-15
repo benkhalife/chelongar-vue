@@ -1,0 +1,33 @@
+{
+  "name": "khatemikhi",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "vite build --mode production",
+    "dev": "vite --host 192.168.43.88",
+    "preview": "vite preview",
+    "build:android": "vite build --mode production && npm run copy-to-android",
+    "copy-to-android": "node copy-to-android.js"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.11",
+    "html2canvas": "^1.4.1",
+    "sweetalert2": "^11.26.18",
+    "register-service-worker": "^1.7.2",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vue-sonner": "^2.0.9"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/cli-plugin-pwa": "~5.0.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7",
+    "vite": "^4.1.4",
+    "vite-plugin-pwa": "^0.14.4"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
