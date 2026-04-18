@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import('./../views/HiddenGallerySettingsView.vue')
     },
     {
+      path: '/hidden-gallery/help',
+      name: 'hg-help',
+      component: () => import('./../views/HiddenGalleryHelpView.vue')
+    },
+    {
       path: '/hidden-gallery/login',
       name: 'hg-login',
       component: () => import('./../views/HiddenGalleryLoginView.vue')

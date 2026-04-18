@@ -13,7 +13,7 @@
             PRO VERSION
           </span>
           <h1 class="text-3xl font-extrabold mb-2">چلونگر حرفه‌ای</h1>
-          <p class="text-orange-50 text-sm">بدون محدودیت، فضای گوشی خود را آزاد کنید</p>
+          <p class="text-orange-50 text-sm">بدون محدودیت، استفاده کنید</p>
         </div>
       </div>
 
@@ -30,8 +30,8 @@
               </svg>
             </div>
             <div class="mr-3">
-              <h3 class="font-bold text-gray-800 text-sm md:text-base">بدون محدودیت</h3>
-              <p class="text-xs text-gray-500 mt-0.5">کاهش حجم اتوماتیک فایل‌ها به صورت کاملاً نامحدود</p>
+              <h3 class="font-bold text-gray-800 text-sm md:text-base">افزایش فضای ذخیره‌سازی گوشی</h3>
+              <p class="text-xs text-gray-600 mt-0.5">بهینه‌سازی و کاهش حجم عکس‌ها و ویدیوها بدون محدودیت و آزادسازی فضای گوشی تاحد امکان</p>
             </div>
           </li>
 
@@ -43,8 +43,8 @@
               </svg>
             </div>
             <div class="mr-3">
-              <h3 class="font-bold text-gray-800 text-sm md:text-base">پردازش سریع‌تر فایل‌ها</h3>
-              <p class="text-xs text-gray-500 mt-0.5">استفاده از تمام توان پردازشی دستگاه برای فشرده‌سازی</p>
+              <h3 class="font-bold text-gray-800 text-sm md:text-base">گالری مخفی بدون محدودیت</h3>
+              <p class="text-xs text-gray-500 mt-0.5">استفاده نامحدود از گالری با تمام قابلیت‌های آن</p>
             </div>
           </li>
 

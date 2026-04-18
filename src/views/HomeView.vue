@@ -17,26 +17,27 @@
         <div class="flex items-center gap-3">
           <div
             class="w-12 h-12 overflow-hidden rounded-2xl bg-white shadow-sm flex items-center justify-center border border-slate-100">
-            <!-- <svg class="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-            </svg> -->
             <img src="@/assets/images/Chelongar-icon-512.png" alt="">
           </div>
           <div>
-            <h1 class="text-2xl font-black text-slate-800 tracking-tight">
+            <h1 class="text-2xl font-black font-bold text-slate-800 tracking-tight">
               چلونگر
             </h1>
             <p class="text-xs text-slate-500 font-medium mt-0.5">بهینه‌ساز هوشمند فضا</p>
           </div>
         </div>
-        <!-- Profile / Notification Placeholder -->
-        <button
-        @click="openHiddenGallery"
+        <!-- Notification Button -->
+        <button v-if="activeHideSmallGalleryButton" @click="exitApp" v-longpress="openHiddenGallery"
           class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-          </svg>
+          <BellIcon v-if="hideGalleryButtonIcon === 'exit'" class="w-6 h-6 text-black/70"></BellIcon>
+          <ArrowRightOnRectangleIcon v-else-if="hideGalleryButtonIcon == 'exit'" class="w-6 h-6 text-black/70">
+          </ArrowRightOnRectangleIcon>
+          <EyeSlashIcon v-else class="w-6 h-6 text-black/70"></EyeSlashIcon>
+        </button>
+
+        <button v-else @click="exitApp" v-longpress="openHiddenGallery"
+          class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors">
+          <ArrowRightOnRectangleIcon class="w-6 h-6 text-black/70"></ArrowRightOnRectangleIcon>
         </button>
       </div>
 
@@ -74,9 +75,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Section Title -->
-      <!-- <p class="text-xs font-bold text-slate-400 mb-4 px-2 tracking-widest uppercase">ابزارهای بهینه‌سازی</p> -->
 
       <!-- Menu Cards Grid -->
       <div class="grid grid-cols-2 gap-4 mb-4">
@@ -141,47 +139,66 @@
         </div>
       </button>
 
-      <!-- Card 4: Settings -->
-            <!-- Card 4: Settings & About (Grid) -->
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        
+      <!-- Card 4: Settings & About + Hidden Gallery (Grid 3 columns) -->
+      <div class="grid  gap-3 mb-4" :class="`${showHiddenGalleryBigButton ? 'grid-cols-3' : 'grid-cols-2'}`">
+
         <!-- دکمه تنظیمات -->
         <button @click="navigate('settings')"
           class="group bg-white rounded-3xl p-4 text-center shadow-sm border border-slate-100 active:scale-95 transition-all duration-200 hover:shadow-md hover:border-indigo-200 flex flex-col items-center justify-center">
           <div
-            class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:bg-indigo-500 group-hover:text-white group-hover:rotate-90 transition-all duration-300">
-            <!-- آیکون چرخ‌دنده -->
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:bg-indigo-500 group-hover:text-white group-hover:rotate-90 transition-all duration-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-bold text-slate-800 mb-0.5">تنظیمات</p>
-            <p class="text-[11px] text-slate-500 font-medium">شخصی‌سازی</p>
+            <p class="text-xs font-bold text-slate-800 mb-0.5">تنظیمات</p>
+            <p class="text-[10px] text-slate-500 font-medium">شخصی‌سازی</p>
           </div>
         </button>
 
-        <!-- دکمه درباره ما / بیشتر -->
+        <!-- دکمه درباره ما -->
         <button @click="navigate('about')"
           class="group bg-white rounded-3xl p-4 text-center shadow-sm border border-slate-100 active:scale-95 transition-all duration-200 hover:shadow-md hover:border-violet-200 flex flex-col items-center justify-center">
           <div
-            class="w-12 h-12 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center mb-3 group-hover:bg-violet-500 group-hover:text-white transition-all duration-300">
-            <!-- آیکون اطلاعات (درباره ما) -->
-            <svg class="w-6 h-6 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            class="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center mb-3 group-hover:bg-violet-500 group-hover:text-white transition-all duration-300">
+            <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-bold text-slate-800 mb-0.5">درباره ما</p>
-            <p class="text-[11px] text-slate-500 font-medium">راهنما و پشتیبانی</p>
+            <p class="text-xs font-bold text-slate-800 mb-0.5">درباره ما</p>
+            <p class="text-[10px] text-slate-500 font-medium">راهنما</p>
+          </div>
+        </button>
+
+        <!-- دکمه گالری مخفی -->
+        <button v-if="showHiddenGalleryBigButton" @click="openHiddenGallery"
+          class="group relative bg-slate-800 rounded-3xl p-4 text-center shadow-sm border border-slate-700 active:scale-95 transition-all duration-200 hover:shadow-lg hover:bg-slate-900 flex flex-col items-center justify-center overflow-hidden">
+          <!-- shimmer effect -->
+          <div
+            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent"></div>
+          </div>
+          <div
+            class="w-11 h-11 rounded-2xl bg-slate-700 text-slate-300 flex items-center justify-center mb-3 group-hover:bg-slate-600 group-hover:text-white transition-all duration-300 relative z-10">
+            <!-- آیکون قفل / گالری مخفی -->
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <div class="relative z-10">
+            <p class="text-xs font-bold text-slate-200 mb-0.5">گالری مخفی</p>
+            <p class="text-[10px] text-slate-500 font-medium">خصوصی</p>
           </div>
         </button>
 
       </div>
-
-
 
       <!-- Footer -->
       <div class="mt-auto pt-6 flex items-center justify-center gap-2">
@@ -198,70 +215,88 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { BellIcon, EyeSlashIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
+// import { ArrowRightOnRectangleIcon } from '@heroicons/vue/20/solid';
+
+
+const hideGalleryButton = ref(AndroidPrefs.getString('gallery_hide_button', '0') === 'true')
+const hideGalleryButtonIcon = ref(AndroidPrefs.getString('gallery_icon', 'exit'))
+
+const hasPin = ref(AndroidPrefs.getString('gallery_pin', '').length === 4)
+
 const router = useRouter();
 
-// متغیرهای واکنش‌گرا برای ذخیره اطلاعات حافظه (به بایت)
 const storageData = ref({
   total: 0,
   used: 0,
   available: 0
 });
 
-const openHiddenGallery = ()=>{
-  router.push({name:'hg-login'})
+const openHiddenGallery = () => {
+  router.push({ name: 'hg-login' })
 }
-// تابعی برای دریافت اطلاعات از Android (یا دیتای تستی در محیط مرورگر)
+
 const fetchStorageInfo = () => {
   try {
-
     if (window.AndroidTools && window.AndroidTools.getStorageInfo) {
       window.AndroidTools.getStorageInfo();
     }
-
   } catch (error) {
     console.error("خطا در دریافت یا پردازش اطلاعات حافظه:", error);
   }
 };
 
-// تابع تبدیل بایت به گیگابایت با یک رقم اعشار 
-// فرمول ریاضی: GB = Bytes / (1024 * 1024 * 1024)
+const showHiddenGalleryBigButton = computed(()=>{
+
+  if(hasPin.value == false || (hasPin.value && hideGalleryButton.value == false)){    
+    return true;
+  }
+  return false;
+})
+
+const activeHideSmallGalleryButton = computed(()=>{
+
+  if(hasPin.value  && hideGalleryButton.value){    
+    return true;
+  }
+  return false;
+})
+
+const exitApp = ()=>{
+  window.handleAndroidBackPress()
+}
+
 const bytesToGB = (bytes) => {
   if (!bytes || bytes === 0) return 0;
   const gb = bytes / (1024 * 1024 * 1024);
   return parseFloat(gb.toFixed(1));
 };
 
-// Computed Properties برای نمایش در قالب (Template)
 const totalGB = computed(() => bytesToGB(storageData.value.total));
 const usedGB = computed(() => bytesToGB(storageData.value.used));
 
 const storagePercentage = computed(() => {
   if (storageData.value.total === 0) return 0;
-  // فرمول ریاضی: % = (Used / Total) * 100
   const percent = (storageData.value.used / storageData.value.total) * 100;
   return Math.round(percent);
 });
 
-// فراخوانی در زمان لود کامپوننت
 onMounted(() => {
+  console.log('gallery hide button:', hideGalleryButton);
 
   setTimeout(() => {
     fetchStorageInfo();
   }, 500)
 
   addEventListener('HomeStorageInfo', event => {
-
     const parsedData = event.detail;
-
     if (parsedData && parsedData.internal) {
       storageData.value = parsedData.internal;
     }
   })
 });
 
-// تابع نویگیشن (مسیریابی)
 const navigate = (page) => {
-
   if (page == 'scanner') {
     if (AndroidMediaPermission.hasStoragePermission() == false) {
       router.push({ name: 'permission', params: { afterPermission: 'scanner' } })
@@ -271,8 +306,6 @@ const navigate = (page) => {
   if (router) {
     router.push({ name: page }).catch(() => { });
   }
-
-  // در صورت نیاز به ارسال دستور به اندروید
   if (window.AndroidTools && window.AndroidTools.navigate) {
     window.AndroidTools.navigate(page);
   }
@@ -280,24 +313,11 @@ const navigate = (page) => {
 </script>
 
 <style scoped>
-/* فونت فارسی و تنظیمات پایه */
 .dir-rtl {
-  font-family: 'Vazirmatn', 'Tahoma', system-ui, -apple-system, sans-serif;
   direction: rtl;
 }
 
-h1,
-h2,
-h3,
-h4,
-p,
-span,
-div,
-button {
-  font-family: 'Vazirmatn' !important
-}
 
-/* حذف هایلایت آبی پیش‌فرض مرورگر در موبایل هنگام کلیک */
 button {
   -webkit-tap-highlight-color: transparent;
   outline: none;

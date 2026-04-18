@@ -32,7 +32,11 @@
             رمز فریب باید با رمز اصلی متفاوت باشد. هنگام ورود با این رمز، گالری خالی به نظر می‌رسد.
           </p>
         </div>
-        <p v-else class="text-sm text-slate-400 mb-3">هنوز رمز عبوری تنظیم نشده است</p>
+        <div v-else>
+
+          <p class="text-sm text-slate-400 mb-3">هنوز رمز عبوری تنظیم نشده است</p>
+          <p class="text-sm text-slate-400 mb-3">برای فعال‌سازی گالری مخفی رمزعبور را تنظیم کنید</p>
+        </div>
         <button @click="openPinPad('set')"
           class="w-full py-3 rounded-2xl text-white text-sm font-bold shadow-sm transition-all active:scale-95"
           :class="isDecoy ? 'bg-orange-500 hover:bg-orange-600' : 'bg-teal-600 hover:bg-teal-700'">
@@ -150,7 +154,7 @@ const tempPin = ref('')
 
 const pinStepLabel = computed(() => {
   if (pinMode.value === 'set') {
-    return pinStep.value === 1 ? 'رمز ۴ رقمی جدید را وارد کنید' : 'رمز را دوباره وارد کنید'
+    return pinStep.value === 1 ? 'رمز ۴ رقمی جدید را وارد کنید' : 'رمز را دوباره وارد کنید (تکرار رمز)'
   }
   if (pinMode.value === 'change') {
     if (pinStep.value === 1) return 'رمز فعلی را وارد کنید'

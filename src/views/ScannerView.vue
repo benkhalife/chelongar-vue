@@ -167,15 +167,6 @@ onMounted(() => {
     // ۳. صدا زدن متد اندروید
     if (window.AndroidTools && window.AndroidTools.scanAndGetOptimizationStats) {
       window.AndroidTools.scanAndGetOptimizationStats();
-    } else {
-      // فقط برای تست در مرورگر کامپیوتر (وقتی به اندروید متصل نیست)
-      console.warn("AndroidTools یافت نشد. استفاده از داده‌های تستی...");
-      setTimeout(() => {
-        handleAndroidResponse(JSON.stringify({
-          totalCurrentSize: 1548576000, // حدود 1.4 گیگابایت
-          expectedSavedSpace: 854857600   // حدود 815 مگابایت
-        }));
-      }, 2000); // شبیه‌سازی زمان اسکن اندروید
     }
   }, 1200);
 });

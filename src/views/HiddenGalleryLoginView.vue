@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -80,6 +80,7 @@ const MAX_ATTEMPTS = 5
 const currentPin = ref('')
 const pinError = ref('')
 const attemptsLeft = ref(MAX_ATTEMPTS)
+const hasPin = ref(AndroidPrefs.getString('gallery_pin', '').length === 4)
 
 
 function onDigit(n) {
@@ -95,6 +96,15 @@ function onBackspace() {
     pinError.value = ''
   }
 }
+
+onMounted(async ()=>{
+  console.log('login pin :', hasPin.value);
+  
+  if(hasPin.value == false){
+    await router.replace({name:'hg-home'})
+    await router.push({name:'hg-settings'})
+  }
+})
 
 function checkPin() {
   const entered = currentPin.value
@@ -130,34 +140,4 @@ function checkPin() {
 }
 
 
-// function checkPin() {
-//   const mainPin = getPrefs('gallery_pin', '')
-//   const decoyPin = getPrefs('gallery_decoy_pin', '')
-//   const entered = currentPin.value
-
-//   // رمز فریب - هدایت به گالری خالی
-//   if (decoyPin.length === 4 && entered === decoyPin) {
-//     router.replace({ name: 'hg-home', query: { decoy: '1' } })
-//     return
-//   }
-
-//   // رمز اصلی - ورود عادی
-//   if (entered === mainPin) {
-//     router.replace({ name: 'hg-home' })
-//     return
-//   }
-
-//   // رمز اشتباه
-//   attemptsLeft.value--
-//   currentPin.value = ''
-
-//   if (attemptsLeft.value <= 0) {
-//     pinError.value = 'تعداد تلاش‌ها به پایان رسید'
-//     // می‌توانی اینجا اپ را ببندی یا به صفحه دیگری هدایت کنی
-//     // try { AndroidApp.close() } catch {}
-//     return
-//   }
-
-//   pinError.value = 'رمز اشتباه است'
-// }
 </script>

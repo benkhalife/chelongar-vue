@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { Toaster } from 'vue-sonner';
 
+
 // در setup()
 const router = useRouter()
 const route = useRoute()
@@ -62,31 +63,12 @@ body {
 
   <RouterView />
 
-  <div class="fixed bottom-0 w-full h-12 bg-gray-400/50"></div>
+  <div class="fixed bottom-0 w-full h-12 bg-gray-400/50 z-10"></div>
   <Toaster position="bottom-center" richColors />
 
 </template>
 
 <style>
-@font-face {
-  font-family: 'vazir-f';
-  src: url('@/fonts/vazir/Vazir.woff2') format('woff2'),
-    url('@/fonts/vazir/Vazir.woff') format('woff'),
-    url('@/fonts/vazir/Vazir.ttf') format('truetype');
-  font-display: swap;
-}
-
-body {
-  font-family: 'vazir-f', Fallback, sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-p {
-  font-family: 'vazir-f' !important;
-}
 
 .dirRTL,
 .swal2-input {

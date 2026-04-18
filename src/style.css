@@ -1,6 +1,23 @@
+
+@import './assets/fonts/vazirmatn/misc/UI/Vazirmatn-UI-font-face.css';
+
 @import "tailwindcss/base";
+
+
 
 @import "tailwindcss/components";
 @import "./css/components.css";
 
 @import "tailwindcss/utilities";
+
+
+/* @import './fonts/vazirmatn/misc/UI/Vazirmatn-UI-font-face.css'; */
+
+body {
+  font-family: 'Vazirmatn UI', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+h1,h2,h3{
+    font-family: 'Vazirmatn UI' !important;
+}
