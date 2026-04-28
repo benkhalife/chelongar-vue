@@ -23,15 +23,14 @@
             <h1 class="text-2xl font-black font-bold text-slate-800 tracking-tight">
               چلونگر
             </h1>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">بهینه‌ساز هوشمند فضا</p>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">فشرده‌سازی و کاهش حجم</p>
           </div>
         </div>
         <!-- Notification Button -->
         <button v-if="activeHideSmallGalleryButton" @click="exitApp" v-longpress="openHiddenGallery"
           class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors">
-          <BellIcon v-if="hideGalleryButtonIcon === 'exit'" class="w-6 h-6 text-black/70"></BellIcon>
-          <ArrowRightOnRectangleIcon v-else-if="hideGalleryButtonIcon == 'exit'" class="w-6 h-6 text-black/70">
-          </ArrowRightOnRectangleIcon>
+          <BellIcon v-if="hideGalleryButtonIcon === 'notification'" class="w-6 h-6 text-black/70"></BellIcon>
+          <ArrowRightOnRectangleIcon v-else-if="hideGalleryButtonIcon == 'exit'" class="w-6 h-6 text-black/70"></ArrowRightOnRectangleIcon>
           <EyeSlashIcon v-else class="w-6 h-6 text-black/70"></EyeSlashIcon>
         </button>
 
@@ -113,7 +112,7 @@
       </div>
 
       <!-- Card 3: Boost Storage - Full Width -->
-      <button @click="navigate('scanner')"
+      <!-- <button @click="navigate('scanner')"
         class="group w-full bg-white rounded-3xl p-4 text-right shadow-sm border border-slate-100 active:scale-95 transition-all duration-200 hover:shadow-md hover:border-emerald-200 mb-4">
         <div class="flex items-center gap-4">
           <div
@@ -137,13 +136,13 @@
             </svg>
           </div>
         </div>
-      </button>
+      </button> -->
 
       <!-- Card 4: Settings & About + Hidden Gallery (Grid 3 columns) -->
-      <div class="grid  gap-3 mb-4" :class="`${showHiddenGalleryBigButton ? 'grid-cols-3' : 'grid-cols-2'}`">
+      <div class="grid  gap-3 mb-4" :class="`${showHiddenGalleryBigButton ? 'grid-cols-2' : 'grid-cols-1'}`">
 
         <!-- دکمه تنظیمات -->
-        <button @click="navigate('settings')"
+        <!-- <button @click="navigate('settings')"
           class="group bg-white rounded-3xl p-4 text-center shadow-sm border border-slate-100 active:scale-95 transition-all duration-200 hover:shadow-md hover:border-indigo-200 flex flex-col items-center justify-center">
           <div
             class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:bg-indigo-500 group-hover:text-white group-hover:rotate-90 transition-all duration-300">
@@ -157,7 +156,7 @@
             <p class="text-xs font-bold text-slate-800 mb-0.5">تنظیمات</p>
             <p class="text-[10px] text-slate-500 font-medium">شخصی‌سازی</p>
           </div>
-        </button>
+        </button> -->
 
         <!-- دکمه درباره ما -->
         <button @click="navigate('about')"
@@ -218,13 +217,20 @@ import { useRouter } from 'vue-router';
 import { BellIcon, EyeSlashIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
 // import { ArrowRightOnRectangleIcon } from '@heroicons/vue/20/solid';
 
+const router = useRouter();
 
-const hideGalleryButton = ref(AndroidPrefs.getString('gallery_hide_button', '0') === 'true')
 const hideGalleryButtonIcon = ref(AndroidPrefs.getString('gallery_icon', 'exit'))
 
+const hideGalleryButton = ref(AndroidPrefs.getString('gallery_hide_button', '0') === 'true')
 const hasPin = ref(AndroidPrefs.getString('gallery_pin', '').length === 4)
 
-const router = useRouter();
+const showHiddenGalleryBigButton = computed(() => {
+
+  if (hasPin.value == false || (hasPin.value && hideGalleryButton.value == false)) {
+    return true;
+  }
+  return false;
+})
 
 const storageData = ref({
   total: 0,
@@ -233,7 +239,13 @@ const storageData = ref({
 });
 
 const openHiddenGallery = () => {
-  router.push({ name: 'hg-login' })
+  const hasPermission = window.AndroidMediaPermission.hasStoragePermission();
+  if (!hasPermission){
+    router.push({ name: 'permission', params: { afterPermission: 'hg-login' } })
+  }
+  else{
+    router.push({ name: 'hg-login' })
+  }
 }
 
 const fetchStorageInfo = () => {
@@ -246,23 +258,17 @@ const fetchStorageInfo = () => {
   }
 };
 
-const showHiddenGalleryBigButton = computed(()=>{
 
-  if(hasPin.value == false || (hasPin.value && hideGalleryButton.value == false)){    
+
+const activeHideSmallGalleryButton = computed(() => {
+
+  if (hasPin.value && hideGalleryButton.value) {
     return true;
   }
   return false;
 })
 
-const activeHideSmallGalleryButton = computed(()=>{
-
-  if(hasPin.value  && hideGalleryButton.value){    
-    return true;
-  }
-  return false;
-})
-
-const exitApp = ()=>{
+const exitApp = () => {
   window.handleAndroidBackPress()
 }
 
@@ -282,7 +288,6 @@ const storagePercentage = computed(() => {
 });
 
 onMounted(() => {
-  console.log('gallery hide button:', hideGalleryButton);
 
   setTimeout(() => {
     fetchStorageInfo();

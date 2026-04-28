@@ -62,9 +62,15 @@ body {
 <template>
 
   <RouterView />
-
+  <Toaster 
+    position="top-center" 
+    richColors 
+    :toastOptions="{ duration: 3000, style: { zIndex: 9999 }, classes: {
+        title: 'dirRTL text-right w-full flex-1',
+        content: 'w-full'
+      } }" 
+  />
   <div class="fixed bottom-0 w-full h-12 bg-gray-400/50 z-10"></div>
-  <Toaster position="bottom-center" richColors />
 
 </template>
 

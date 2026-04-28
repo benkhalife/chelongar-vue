@@ -33,6 +33,16 @@ const handleCompressFinished = (event) => {
         compressedData.value = event.detail
         finishCompressionAnimation(event.detail.file_size)
     }
+    else{
+        resetState()
+        Swal.fire({
+            text:'متاسفانه هنگام فشرده سازی مشکلی روی داده است دوباره تلاش کنید و یا یک ویدیو دیگر را امتحان کنید',
+            icon:'warning',
+            showCancelButton:true,
+            cancelButtonText:'بستن'
+        })
+
+    }
 }
 
 onMounted(() => {
@@ -66,7 +76,6 @@ const estimateCompressionTime = (video) => {
     const { duration, resolution, size } = video;
     let width = 1920, height = 1080;
 
-    // استخراج ابعاد در صورت وجود
     if (resolution && resolution.includes('x')) {
         const parts = resolution.split('x').map(Number);
         if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
@@ -75,21 +84,19 @@ const estimateCompressionTime = (video) => {
         }
     }
 
-    // محاسبه تعداد پیکسل‌ها
     const totalPixels = width * height;
     const base1080pPixels = 1920 * 1080;
     const pixelRatio = totalPixels / base1080pPixels;
 
-    // فرض: فشرده‌سازی یک ویدیوی 1080p حدود 1.5 برابر زمان خود ویدیو طول می‌کشد
-    // ضریب حجم: فایل‌های سنگین‌تر (بیت‌ریت بالاتر) کمی بیشتر طول می‌کشند
     const sizeInMB = size / (1024 * 1024);
-    const sizeFactor = Math.min(sizeInMB / 100, 0.5); // تاثیر حداکثر 50 درصدی حجم
+    const sizeFactor = Math.min(sizeInMB / 100, 0.5);
 
-    // محاسبه نهایی تخمین
     let estimateMs = duration * pixelRatio * 1.5 * (1 + sizeFactor);
 
-    // زمان نباید کمتر از 3 ثانیه و بیشتر از 3 دقیقه در نظر گرفته شود (برای جلوگیری از باگ‌های نمایشی)
-    return Math.max(3000, Math.min(estimateMs, 180000));
+    // ضریب بدبینانه: 1.5 برابر تخمین قبلی
+    estimateMs *= 1.5;
+
+    return Math.max(3000, Math.min(estimateMs, 270000)); // حداکثر 4.5 دقیقه
 }
 
 const compressVideo = () => {
@@ -99,7 +106,6 @@ const compressVideo = () => {
     displaySize.value = videoData.value.size
     progressPercent.value = 0
 
-    // دریافت زمان تخمینی
     const estimatedTimeMs = estimateCompressionTime(videoData.value);
     const startTime = performance.now();
     const startSize = videoData.value.size;
@@ -110,22 +116,29 @@ const compressVideo = () => {
         let elapsed = time - startTime;
 
         if (elapsed <= estimatedTimeMs) {
-            // فاز اول: حرکت تا 30 درصد در طول زمان تخمینی
+            // فاز اول: حرکت تا 15% در طول زمان تخمینی
             let p = elapsed / estimatedTimeMs;
-            let easeOut = 1 - Math.pow(1 - p, 2); // شروع سریع‌تر، پایان نرم‌تر
-            progressPercent.value = easeOut * 30;
+            let easeOut = 1 - Math.pow(1 - p, 2);
+            progressPercent.value = easeOut * 15;
         } else {
-            // فاز دوم: زمان تخمینی تمام شده اما عملیات اندروید هنوز تمام نشده است
-            // حرکت مجانبی و بسیار کند به سمت 40 درصد
-            let remainingProgress = 40 - progressPercent.value;
-            // در هر فریم مقدار بسیار کمی (0.1 درصد از مسیر باقیمانده) جلو می‌رود
-            progressPercent.value += remainingProgress * 0.001;
+            // فاز دوم: از 15% به 25% با سرعت کاهنده
+            let currentProgress = progressPercent.value;
+            let targetProgress = 25;
+            let remainingProgress = targetProgress - currentProgress;
+            
+            // هرچه به 25 نزدیک‌تر می‌شویم، سرعت کمتر می‌شود
+            // با استفاده از ضریب کاهنده که با نزدیک شدن به هدف کوچک‌تر می‌شود
+            let distanceFromTarget = targetProgress - currentProgress;
+            let slowdownFactor = Math.pow(distanceFromTarget / 10, 1.5); // هرچه فاصله کمتر، ضریب کوچک‌تر
+            let increment = remainingProgress * 0.0005 * Math.max(slowdownFactor, 0.1);
+            
+            progressPercent.value += increment;
+            progressPercent.value = Math.min(progressPercent.value, 24.9); // هرگز به 25 نمی‌رسد
         }
 
-        // آپدیت کردن حجم نمایشی متناسب با درصد پیشرفت (فرض میکنیم قراره در نهایت مثلا 60 درصد حجم کم بشه)
-        // پس در پیشرفت 40 درصدی، حجم نمایشی رو به نسبت کاهش میدیم
-        let reductionFactor = progressPercent.value / 100; // عددی بین 0 تا 0.4
-        displaySize.value = startSize - (startSize * reductionFactor);
+        // کاهش تدریجی حجم نمایشی
+        let reductionFactor = progressPercent.value / 100;
+        displaySize.value = startSize - (startSize * reductionFactor * 0.6);
 
         animationFrameId = requestAnimationFrame(animateFakeProgress);
     }
@@ -355,8 +368,8 @@ const strokeDashoffset = computed(() => {
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-2 gap-4 w-full">
-                                            <button @click="shareVideo"
+                                        <div class="grid grid-cols-1 gap-4 w-full">
+                                            <!-- <button @click="shareVideo"
                                                 class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-cyan-500/25 transition-all hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -366,7 +379,7 @@ const strokeDashoffset = computed(() => {
                                                     </path>
                                                 </svg>
                                                 اشتراک گزاری
-                                            </button>
+                                            </button> -->
 
                                             <button @click="pickVideo"
                                                 class="flex-1 text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors bg-gray-500/5 border-2 rounded-xl p-4">

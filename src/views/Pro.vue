@@ -1,5 +1,5 @@
 <template>
-  <div dir="rtl" class="min-h-screen bg-gray-100 p-4 md:p-8 font-sans flex items-center justify-center">
+  <div dir="rtl" class="min-h-screen bg-gray-100 p-4 md:p-8 flex items-center justify-center">
     <div class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
       
       <!-- هدر نسخه حرفه ای -->
@@ -23,7 +23,7 @@
         
         <ul class="space-y-4">
           <!-- آیتم 1 -->
-          <li class="flex items-start">
+          <!-- <li class="flex items-start">
             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
               <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
@@ -33,7 +33,7 @@
               <h3 class="font-bold text-gray-800 text-sm md:text-base">افزایش فضای ذخیره‌سازی گوشی</h3>
               <p class="text-xs text-gray-600 mt-0.5">بهینه‌سازی و کاهش حجم عکس‌ها و ویدیوها بدون محدودیت و آزادسازی فضای گوشی تاحد امکان</p>
             </div>
-          </li>
+          </li> -->
 
           <!-- آیتم 2 -->
           <li class="flex items-start">
@@ -44,12 +44,35 @@
             </div>
             <div class="mr-3">
               <h3 class="font-bold text-gray-800 text-sm md:text-base">گالری مخفی بدون محدودیت</h3>
-              <p class="text-xs text-gray-500 mt-0.5">استفاده نامحدود از گالری با تمام قابلیت‌های آن</p>
+              <p class="text-xs text-gray-500 mt-0.5">استفاده نامحدود از گالری مخفی</p>
+            </div>
+          </li>
+          <li class="flex items-start">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div class="mr-3">
+              <h3 class="font-bold text-gray-800 text-sm md:text-base">رمزفریب</h3>
+              <p class="text-xs text-gray-500 mt-0.5">یک قابلیت ویژه امنیتی برای گالری مخفی</p>
+            </div>
+          </li>
+
+          <li class="flex items-start">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div class="mr-3">
+              <h3 class="font-bold text-gray-800 text-sm md:text-base">امکانات در آینده</h3>
+              <p class="text-xs text-gray-500 mt-0.5">همین طور به امکاناتی که در آپدیت‌های بعدی به برنامه اضافه خواهد شد هم بدون محدودیت دسترسی خواهید داشت</p>
             </div>
           </li>
 
           <!-- آیتم 3 -->
-          <li class="flex items-start">
+          <!-- <li class="flex items-start">
             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
               <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
@@ -59,7 +82,7 @@
               <h3 class="font-bold text-gray-800 text-sm md:text-base">کاهش حجم اتوماتیک</h3>
               <p class="text-xs text-gray-500 mt-0.5">شناسایی خودکار و کاهش حجم فایل های جدید</p>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
 
@@ -92,10 +115,17 @@
 
 <script setup>
 import {BuyPackage} from '@/data/Payment'
+import { toast } from 'vue-sonner';
 // در صورت استفاده از Vue 3 Setup
 const buyPremium = () => {
 
-  BuyPackage('pro', 'chelongar');
+  if(AndroidPrefs.getBoolean('is_pro', false)){    
+    toast.success('شما از نسخه حرفه‌ای استفاده می‌کنید')
+  }
+  else{
+    BuyPackage('pro', 'chelongar');
+  }
+
     
 }
 </script>

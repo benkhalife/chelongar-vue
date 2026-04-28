@@ -297,6 +297,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Footer from '../components/Footer.vue'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2';
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
@@ -309,6 +310,7 @@ const activeFilter = ref('all')
 const selectedFile = ref(null)
 const viewerFile = ref(null)
 const fileToDelete = ref(null)
+const isPro = ref(false)
 const toast = ref({ show: false, message: '', type: 'success' })
 let toastTimer = null
 
@@ -340,6 +342,8 @@ const filteredFiles = computed(() => {
 // ─── Lifecycle ───────────────────────────────────────────────────────────────
 
 onMounted(() => {
+  try { isPro.value = AndroidPrefs.getBoolean('is_pro', false) } catch { isPro.value = false }
+
   window.onGalleryFileList = handleFileList
   window.onFileHidden = handleFileHidden
   window.onFileRestored = handleFileRestored
@@ -372,7 +376,7 @@ function handleFileList(jsonStr) {
   isLoading.value = false
   const result = JSON.parse(jsonStr)
   console.log('handleFileList:result:', result);
-  
+
   if (result.success) {
     // استفاده مستقیم از سرور NanoHTTPD (لوکال هاست 8080)
     files.value = result.data.map(f => ({
@@ -383,7 +387,7 @@ function handleFileList(jsonStr) {
       thumbUrl: `http://localhost:8080/thumb/${f.folder}/${f.id}`
     }))
 
-      console.log('handleFileList:files.value:', files.value);
+    console.log('handleFileList:files.value:', files.value);
 
   } else {
     showToast('خطا در بارگذاری: ' + result.error, 'error')
@@ -394,10 +398,32 @@ function handleFileList(jsonStr) {
 
 // ─── User Actions ─────────────────────────────────────────────────────────────
 
-function pickFile() {
+async function pickFile() {
+
+  console.log('isPro:', isPro, 'total');
+
+  if (!isPro.value && totalCount.value >= 15) {
+    const btn = await Swal.fire({
+      title: 'محدودیت نسخه رایگان',
+      text: 'دوست عزیز برای استفاده نامحدود از گالری مخفی لطفا برنامه را به نسخه حرفه‌ای ارتقا دهید',
+      showCancelButton: true,
+      showConfirmButton: true,
+      cancelButtonText: 'لغو',
+      confirmButtonText: 'مشاهده صفحه ارتقا'
+    })
+
+    if (btn.isConfirmed) {
+      router.push({ 'name': 'pro' })
+    }
+
+    return;
+  }
+
+
   if (isPickerLoading.value) return
   isPickerLoading.value = true
   if (window.HiddenGallery) {
+
     window.HiddenGallery.openPicker('image/*,video/*', 'onFileHidden')
   } else {
     setTimeout(() => { isPickerLoading.value = false }, 1000)
@@ -463,7 +489,7 @@ function handleFileDeleted(jsonStr) {
 }
 
 function onSettingsClick() {
-  router.push({name:'hg-settings'})
+  router.push({ name: 'hg-settings' })
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

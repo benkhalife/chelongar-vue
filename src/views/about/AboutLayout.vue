@@ -5,7 +5,7 @@
       <!-- هدر اپلیکیشن -->
       <div class="bg-indigo-600 text-white text-center py-8 px-4 sticky top-0 z-10">
         <h1 class="text-4xl font-extrabold mb-2">چلونگر</h1>
-        <p class="text-indigo-200 text-sm md:text-base">کاهش حجم پیشرفته و افزایش حافظه گوشی</p>
+        <!-- <p class="text-indigo-200 text-sm md:text-base">فشرده‌سازی عکس و ویدیو</p> -->
       </div>
 
       <!-- نوار تب‌ها -->
@@ -17,12 +17,12 @@
           درباره ما
         </router-link>
         
-        <router-link 
+        <!-- <router-link 
           to="/about/guide" 
           class="flex-1 text-center py-4 font-semibold text-gray-500 hover:text-indigo-600 transition-colors duration-200"
           active-class="border-b-4 border-indigo-600 text-indigo-700 bg-indigo-50">
           آموزش استفاده
-        </router-link>
+        </router-link> -->
 
         <router-link 
           to="/about/privacy" 

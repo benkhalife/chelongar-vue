@@ -81,7 +81,7 @@ const router = createRouter({
       component: () => import('../views/ProgressCompressView.vue')
     },
     {
-      path: '/permission',
+      path: '/permission/:afterPermission',
       name: 'permission',
       component: () => import('../views/PermissionHerlperView.vue')
     },

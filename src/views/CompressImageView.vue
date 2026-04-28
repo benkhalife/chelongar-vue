@@ -12,7 +12,12 @@ const showSettings = ref(false)
 // تنظیمات فشرده‌سازی
 const quality = ref(80)
 const format = ref('jpg')
-const resolutionScale = ref(100)
+
+// مقادیر استاندارد توان ۲ (مطابق با inSampleSize اندروید)
+const scaleOptions = [12.5, 25, 50, 100]
+const resolutionIndex = ref(3) // پیش‌فرض روی 100% (ایندکس 3)
+
+const resolutionScale = computed(() => scaleOptions[resolutionIndex.value])
 
 let animationFrameId = null;
 
@@ -76,7 +81,7 @@ const resetState = () => {
     compressedData.value = null
     displaySize.value = imageData.value?.size || 0
     progressPercent.value = 0
-    resolutionScale.value = 100
+    resolutionIndex.value = 3 // تغییر به ایندکس 100%
     quality.value = 80
     format.value = 'jpg'
     showSettings.value = false
@@ -270,7 +275,7 @@ const strokeDashoffset = computed(() => {
                                         </div>
 
                                         <!-- رزولوشن -->
-                                        <div>
+                                        <!-- <div>
                                             <div class="flex justify-between items-center mb-2">
                                                 <label class="text-sm text-slate-400">رزولوشن</label>
                                                 <span dir="ltr" class="text-cyan-400 font-mono text-sm">
@@ -285,7 +290,27 @@ const strokeDashoffset = computed(() => {
                                                 <span>{{ resolutionScale }}%</span>
                                                 <span>100%</span>
                                             </div>
+                                        </div> -->
+                                        <div>
+                                            <div class="flex justify-between items-center mb-2">
+                                                <label class="text-sm text-slate-400">رزولوشن (استاندارد)</label>
+                                                <span dir="ltr" class="text-cyan-400 font-mono text-sm">
+                                                    {{ targetDimensions.width }}×{{ targetDimensions.height }}
+                                                </span>
+                                            </div>
+
+                                            <input type="range" v-model.number="resolutionIndex" min="0"
+                                                :max="scaleOptions.length - 1" step="1"
+                                                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer slider" />
+
+                                            <div class="flex justify-between text-xs text-slate-500 mt-1">
+                                                <span v-for="scale in scaleOptions" :key="scale"
+                                                    :class="{ 'text-cyan-400 font-bold': resolutionScale === scale }">
+                                                    {{ scale }}%
+                                                </span>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </transition>
 
@@ -383,8 +408,8 @@ const strokeDashoffset = computed(() => {
                                             </button>
                                         </div>
 
-                                        <div class="grid grid-cols-2 gap-4 w-full">
-                                            <button @click="shareImage"
+                                        <div class="grid grid-cols-1 gap-4 w-full">
+                                            <!-- <button @click="shareImage"
                                                 class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-cyan-500/25 transition-all hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -394,7 +419,7 @@ const strokeDashoffset = computed(() => {
                                                     </path>
                                                 </svg>
                                                 اشتراک گزاری
-                                            </button>
+                                            </button> -->
 
                                             <button @click="pickImage"
                                                 class="flex-1 text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors bg-gray-500/5 border-2 rounded-xl p-4">

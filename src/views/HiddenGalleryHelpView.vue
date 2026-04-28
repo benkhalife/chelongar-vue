@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color: rgb(208 211 215);" class="min-h-screen text-slate-800 overflow-hidden relative"
+    <div style="background-color: rgb(208 211 215);" class="min-h-screen text-slate-800 overflow-hidden relative text-justify"
         dir="rtl">
         <!-- Background blobs -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
@@ -102,7 +102,7 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-base font-bold text-slate-800 mb-2">قفل پس از تلاش ناموفق <span class="text-xs font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">نسخه حرفه‌ای</span></h3>
+                            <h3 class="text-base font-bold text-slate-800 mb-2">قفل پس از تلاش ناموفق </h3>
                             <p class="text-sm text-slate-600 leading-relaxed mb-3">
                                 این قابلیت امنیتی جلوی حدس زدن رمز عبور را می‌گیرد. اگر کسی ۵ بار پشت سر هم رمز اشتباه وارد کند، گالری مخفی به مدت ۲۴ ساعت قفل می‌شود و هیچ‌کس نمی‌تواند به آن دسترسی پیدا کند.
                             </p>

@@ -19,9 +19,12 @@
 
             <!-- Description -->
             <div class="text-gray-600 mb-8 leading-relaxed text-right" dir="rtl">
-                <p class="mb-4">
+                <!-- <p class="mb-4">
                     برای کاهش خودکار حجم عکس‌ها و مدیریت حافظه گوشی، این برنامه نیاز به داشتن اجازه دسترسی به فایل‌های
                     شما دارد.
+                </p> -->
+                <p class="mb-4">
+                    این برنامه برای مدیریت و کارکرد صحیح بخش گالری مخفی نیاز دارد تا شما اجازه دسترسی به فایل‌ها را به آن بدهید
                 </p>
                 <p class="text-sm mb-4">
                     با کلیک روی دکمه زیر، صفحه تنظیمات باز می‌شود. لطفاً دسترسی را فعال کنید.
@@ -92,7 +95,7 @@ export default {
                 console.log('checkPermission:', hasPermission);
 
                 if (hasPermission) {
-                    this.$router.push({ name: this.$route.params.afterPermission  });
+                    this.$router.replace({ name: this.$route.params.afterPermission  });
                 }
             }
         }
